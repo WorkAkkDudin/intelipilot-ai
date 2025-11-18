@@ -14,7 +14,92 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tool_results: {
+        Row: {
+          created_at: string
+          id: string
+          input_data: Json | null
+          output_data: Json | null
+          project_id: string
+          tool_name: Database["public"]["Enums"]["tool_name"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          input_data?: Json | null
+          output_data?: Json | null
+          project_id: string
+          tool_name: Database["public"]["Enums"]["tool_name"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          input_data?: Json | null
+          output_data?: Json | null
+          project_id?: string
+          tool_name?: Database["public"]["Enums"]["tool_name"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_results_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +108,13 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      tool_name:
+        | "audience"
+        | "custdev"
+        | "market"
+        | "offer"
+        | "funnel"
+        | "decomposition"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +241,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      tool_name: [
+        "audience",
+        "custdev",
+        "market",
+        "offer",
+        "funnel",
+        "decomposition",
+      ],
+    },
   },
 } as const
