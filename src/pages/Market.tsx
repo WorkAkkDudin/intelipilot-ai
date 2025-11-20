@@ -1,14 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ToolLayout from "@/components/ToolLayout";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useToolData } from "@/contexts/ToolDataContext";
+import { useToast } from "@/hooks/use-toast";
 
 const Market = () => {
   const [industry, setIndustry] = useState("");
   const [competitors, setCompetitors] = useState("");
   const [result, setResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { toolData, clearToolData } = useToolData();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (toolData) {
+      setCompetitors(prev => 
+        prev ? `${prev}\n\n--- Импортированные данные из ${toolData.sourceToolName} ---\n${toolData.data}` 
+        : `--- Импортированные данные из ${toolData.sourceToolName} ---\n${toolData.data}`
+      );
+      toast({
+        title: "Данные импортированы",
+        description: `Данные из ${toolData.sourceToolName} добавлены в конкурентов`,
+      });
+      clearToolData();
+    }
+  }, [toolData, clearToolData, toast]);
 
   const handleGenerate = async () => {
     setIsLoading(true);
@@ -100,6 +118,10 @@ const Market = () => {
     </div>
   );
 
+  const handleImport = () => {
+    // Import is handled by useEffect
+  };
+
   return (
     <ToolLayout
       title="Анализ рынка"
@@ -107,8 +129,11 @@ const Market = () => {
       inputSection={inputSection}
       outputSection={outputSection}
       onGenerate={handleGenerate}
-      onImport={() => console.log("Import data")}
+      onImport={handleImport}
       isLoading={isLoading}
+      hasResult={!!result}
+      toolName="Анализ рынка"
+      resultData={result}
     />
   );
 };
