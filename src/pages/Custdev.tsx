@@ -1,12 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ToolLayout from "@/components/ToolLayout";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { useToolData } from "@/contexts/ToolDataContext";
+import { useToast } from "@/hooks/use-toast";
 
 const Custdev = () => {
   const [hypothesis, setHypothesis] = useState("");
   const [result, setResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { toolData, clearToolData } = useToolData();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (toolData) {
+      setHypothesis(prev => 
+        prev ? `${prev}\n\n--- Импортированные данные из ${toolData.sourceToolName} ---\n${toolData.data}` 
+        : `--- Импортированные данные из ${toolData.sourceToolName} ---\n${toolData.data}`
+      );
+      toast({
+        title: "Данные импортированы",
+        description: `Данные из ${toolData.sourceToolName} добавлены в гипотезы`,
+      });
+      clearToolData();
+    }
+  }, [toolData, clearToolData, toast]);
 
   const handleGenerate = async () => {
     setIsLoading(true);
@@ -81,6 +99,10 @@ const Custdev = () => {
     </div>
   );
 
+  const handleImport = () => {
+    // Import is handled by useEffect
+  };
+
   return (
     <ToolLayout
       title="Кастдев"
@@ -88,8 +110,11 @@ const Custdev = () => {
       inputSection={inputSection}
       outputSection={outputSection}
       onGenerate={handleGenerate}
-      onImport={() => console.log("Import data")}
+      onImport={handleImport}
       isLoading={isLoading}
+      hasResult={!!result}
+      toolName="CustDev"
+      resultData={result}
     />
   );
 };

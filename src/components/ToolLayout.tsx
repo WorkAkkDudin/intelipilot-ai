@@ -1,7 +1,8 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Upload, Sparkles } from "lucide-react";
+import { Upload, Sparkles, Share2 } from "lucide-react";
+import ExportDialog from "./ExportDialog";
 
 interface ToolLayoutProps {
   title: string;
@@ -10,7 +11,11 @@ interface ToolLayoutProps {
   outputSection: ReactNode;
   onGenerate: () => void;
   onImport?: () => void;
+  onExport?: () => void;
   isLoading?: boolean;
+  hasResult?: boolean;
+  toolName: string;
+  resultData?: string;
 }
 
 const ToolLayout = ({ 
@@ -20,8 +25,21 @@ const ToolLayout = ({
   outputSection, 
   onGenerate, 
   onImport,
-  isLoading = false 
+  onExport,
+  isLoading = false,
+  hasResult = false,
+  toolName,
+  resultData = ""
 }: ToolLayoutProps) => {
+  const [exportDialogOpen, setExportDialogOpen] = useState(false);
+
+  const handleExport = () => {
+    if (onExport) {
+      onExport();
+    }
+    setExportDialogOpen(true);
+  };
+
   return (
     <div className="h-full flex flex-col">
       <div className="p-8 border-b border-border bg-card">
@@ -47,8 +65,18 @@ const ToolLayout = ({
                 <Button 
                   onClick={onImport} 
                   variant="outline"
+                  title="Импортировать данные"
                 >
                   <Upload className="h-4 w-4" />
+                </Button>
+              )}
+              {hasResult && (
+                <Button 
+                  onClick={handleExport} 
+                  variant="outline"
+                  title="Передать в другой инструмент"
+                >
+                  <Share2 className="h-4 w-4" />
                 </Button>
               )}
             </div>
@@ -61,6 +89,13 @@ const ToolLayout = ({
           </Card>
         </div>
       </div>
+
+      <ExportDialog 
+        open={exportDialogOpen}
+        onOpenChange={setExportDialogOpen}
+        sourceToolName={toolName}
+        data={resultData}
+      />
     </div>
   );
 };
