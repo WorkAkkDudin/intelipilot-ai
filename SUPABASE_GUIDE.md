@@ -5,9 +5,9 @@
 Supabase уже настроен и готов к работе!
 
 **Ваш проект**:
-- Project ID: `isijxadukxzepacsxrjs`
-- URL: https://isijxadukxzepacsxrjs.supabase.co
-- Dashboard: https://supabase.com/dashboard/project/isijxadukxzepacsxrjs
+- Project ID: `yearakcidkxachppwvpa`
+- URL: https://yearakcidkxachppwvpa.supabase.co
+- Dashboard: https://supabase.com/dashboard/project/yearakcidkxachppwvpa
 
 ---
 
@@ -439,7 +439,7 @@ ON projects(user_id);
 
 ```bash
 # Если установлен Supabase CLI
-npx supabase gen types typescript --project-id isijxadukxzepacsxrjs > src/integrations/supabase/types.ts
+npx supabase gen types typescript --project-id yearakcidkxachppwvpa > src/integrations/supabase/types.ts
 ```
 
 Или вручную в Dashboard:
@@ -480,4 +480,4 @@ Dashboard → Settings → API → Usage
 
 **Дата**: 2025-11-21
 **Проект**: InteliPilot AI
-**Supabase Project**: isijxadukxzepacsxrjs
+**Supabase Project**: yearakcidkxachppwvpa
